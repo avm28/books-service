@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: books-service-dp
+spec:
+  type: NodePort
+  ports:
+    - port: 9292
+      targetPort: 9292
+      nodePort: 30096
+  selector:
+    app: books-dp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: books-dp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: books-dp
+  template:
+    metadata:
+      labels:
+        app: books-dp
+    spec:
+      containers:
+        - name: books-dp
+          image: rbutechnologies/books-service:latest
+          ports:
+            - containerPort: 9292
